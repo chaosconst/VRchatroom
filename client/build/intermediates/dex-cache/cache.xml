@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="utf-8"?>
+<pre-dex-items>
+
+    <item
+        dex="/Users/yuan/Projects/cardboard.old/CardboardSample/build/intermediates/pre-dexed/debug/cardboard-d35fbed8469bac5f2bce3a598b9dbe5396342e63.jar"
+        jar="/Users/yuan/Projects/cardboard.old/CardboardSample/libs/cardboard.jar"
+        jumboMode="false"
+        revision="19.1.0"
+        sha1="7800973ef52ae629978ad974370b6a0b9bc79e25"/>
+    <item
+        dex="/Users/yuan/Projects/cardboard.old/CardboardSample/build/intermediates/pre-dexed/debug/internal_impl-21.0.2-296a9304c378d19115c57e673507be799107b812.jar"
+        jar="/Users/yuan/Projects/cardboard.old/CardboardSample/build/intermediates/exploded-aar/com.android.support/support-v4/21.0.2/libs/internal_impl-21.0.2.jar"
+        jumboMode="false"
+        revision="19.1.0"
+        sha1="962e8b12569c56dbdcf8367eb4eac8bb129cd18f"/>
+    <item
+        dex="/Users/yuan/Projects/cardboard.old/CardboardSample/build/intermediates/pre-dexed/debug/support-annotations-21.0.2-dc1353b517f19eda9a11dfa567c567826f477639.jar"
+        jar="/opt/android-sdk-macosx/extras/android/m2repository/com/android/support/support-annotations/21.0.2/support-annotations-21.0.2.jar"
+        jumboMode="false"
+        revision="19.1.0"
+        sha1="99373741f99a0556ee293c41e8faa1ca3ae8a4e6"/>
+    <item
+        dex="/Users/yuan/Projects/cardboard.old/CardboardSample/build/intermediates/pre-dexed/debug/classes-90a504b1193837d7229148bf91596e4bf5bd2d89.jar"
+        jar="/Users/yuan/Projects/cardboard.old/CardboardSample/build/intermediates/exploded-aar/com.android.support/support-v4/21.0.2/classes.jar"
+        jumboMode="false"
+        revision="19.1.0"
+        sha1="d1bf02de1c56d942e7a9d093b8610ba1ef4128e3"/>
+
+</pre-dex-items>

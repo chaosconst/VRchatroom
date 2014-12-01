@@ -98,6 +98,11 @@ public class MainActivity extends CardboardActivity implements CardboardView.Ste
 
     private CardboardOverlayView mOverlayView;
 
+    float mX = 0f;
+    float mY = 0f;
+    float mZ = -12f;
+    boolean near = false;
+
 
 
     /**
@@ -323,8 +328,25 @@ public class MainActivity extends CardboardActivity implements CardboardView.Ste
         mModelParam = GLES20.glGetUniformLocation(mGlProgram, "u_Model");
         mIsFloorParam = GLES20.glGetUniformLocation(mGlProgram, "u_IsFloor");
 
+        if(((mX < 32 && mX > 0) || mX <= 0) && !near){
+            mX+=0.5f;
+            if(mX >= 32){
+                near = true;
+            }
+        }else if(mX >= 32 || near){
+            mX-=0.5;
+            if(mX <= 0){
+                near = false;
+            }
+        }
+        Log.i("vr", "vr:"+mX);
+
         // Build the Model part of the ModelView matrix.
-        Matrix.rotateM(mModelCube, 0, TIME_DELTA, 0.5f, 0.5f, 1.0f);
+        //Matrix.rotateM(mModelCube, 0, 0, mX,mY,mZ);
+        Matrix.setIdentityM(mModelCube, 0);
+        Matrix.translateM(mModelCube, 0, mX, mY, mZ);
+        // Build the Model part of the ModelView matrix.
+//        Matrix.rotateM(mModelCube, 0, TIME_DELTA, 0.5f, 0.5f, 1.0f);
 
         // send head vector to server
         headTransform.getHeadView(mHeadView, 0);

@@ -240,12 +240,12 @@ public final class WorldLayoutData {
     };
 
     public static final float[] FLOOR_COLORS = new float[] {
-            1.0f, 0f, 1f, 1.0f,
-            1.0f, 0f, 1f, 1.0f,
-            1.0f, 0f, 1f, 1.0f,
-            1.0f, 0f, 1f, 1.0f,
-            1.0f, 0f, 1f, 1.0f,
-            1.0f, 0f, 1f, 1.0f,
+            0.0f, 0.5f, 1f, 1.0f,
+            0.0f, 0.5f, 1f, 1.0f,
+            0.0f, 0.5f, 1f, 1.0f,
+            0.0f, 0.5f, 1f, 1.0f,
+            0.0f, 0.5f, 1f, 1.0f,
+            0.0f, 0.5f, 1f, 1.0f,
     };
 
 }

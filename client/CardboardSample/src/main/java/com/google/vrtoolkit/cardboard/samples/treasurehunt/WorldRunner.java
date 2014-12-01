@@ -27,6 +27,14 @@ public class WorldRunner implements Runnable{
 
 
     public void run() {
+        try {
+            init();
+        } catch (UnknownHostException e) {
+//            mOverlayView.show3DToast("Unknow Host, Can't get online!");
+        } catch (IOException e) {
+//            mOverlayView.show3DToast("Host IO Error, Can't get online!");
+        }
+
         while (KeepWorldRunning) {
             try {
                 float[] forward = world.get("HeadVector");

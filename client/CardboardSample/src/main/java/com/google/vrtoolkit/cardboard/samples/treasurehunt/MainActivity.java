@@ -151,14 +151,17 @@ public class MainActivity extends CardboardActivity implements CardboardView.Ste
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-        if (android.os.Build.VERSION.SDK_INT > 9) {
-            android.os.StrictMode.ThreadPolicy policy = new android.os.StrictMode.ThreadPolicy.Builder().permitAll().build();
-            android.os.StrictMode.setThreadPolicy(policy);
-        }
-
         setContentView(R.layout.common_ui);
         CardboardView cardboardView = (CardboardView) findViewById(R.id.cardboard_view);
         cardboardView.setRenderer(this);
+
+        // Manually set the screen size.
+        //android.view.Display display = getWindowManager().getDefaultDisplay();
+        //ScreenParams params = new ScreenParams(display);
+        //params.setWidth(1280);
+        //params.setHeight(760);
+        //cardboardView.updateScreenParams(params);
+
         setCardboardView(cardboardView);
 
         mModelCube = new float[16];
@@ -174,33 +177,11 @@ public class MainActivity extends CardboardActivity implements CardboardView.Ste
         mOverlayView = (CardboardOverlayView) findViewById(R.id.overlay);
         mOverlayView.show3DToast("Connecting...");
 
-        Log.i(TAG, "Runner Init");
-        Log.i(TAG, "Runner Init");
-        Log.i(TAG, "Runner Init");
-        Log.i(TAG, "Runner Init");
-        Log.i(TAG, "Runner Init");
-        Log.i(TAG, "Runner Init");
-        Log.i(TAG, "Runner Init");
-        Log.i(TAG, "Runner Init");
-        Log.i(TAG, "Runner Init");
-        Log.i(TAG, "Runner Init");
-        Log.i(TAG, "Runner Init");
-        Log.i(TAG, "Runner Init");
-
-        try {
-
-            Log.e(TAG, "Runner Init");
-            runner.setWorld(world);
-            runner.init();
-            Log.e(TAG, "Runner Will Run");
-            new Thread(runner).start();
-            Log.e(TAG, "Runner is running");
-        } catch (UnknownHostException e) {
-            mOverlayView.show3DToast("Unknow Host, Can't get online!");
-        } catch (IOException e) {
-            mOverlayView.show3DToast("Host IO Error, Can't get online!");
-        }
-
+        Log.e(TAG, "Runner Init");
+        runner.setWorld(world);
+        Log.e(TAG, "Runner Will Run");
+        new Thread(runner).start();
+        Log.e(TAG, "Runner is running");
 
     }
 
@@ -211,6 +192,7 @@ public class MainActivity extends CardboardActivity implements CardboardView.Ste
 
     @Override
     public void onSurfaceChanged(int width, int height) {
+        checkGLError("onSurfaceChanged");
         Log.i(TAG, "onSurfaceChanged");
     }
 
@@ -315,7 +297,9 @@ public class MainActivity extends CardboardActivity implements CardboardView.Ste
      */
     @Override
     public void onNewFrame(HeadTransform headTransform) {
+        checkGLError("onReadyToDraw0");
         GLES20.glUseProgram(mGlProgram);
+        checkGLError("onReadyToDraw1");
 
         mModelViewProjectionParam = GLES20.glGetUniformLocation(mGlProgram, "u_MVP");
         mLightPosParam = GLES20.glGetUniformLocation(mGlProgram, "u_LightPos");
@@ -323,19 +307,27 @@ public class MainActivity extends CardboardActivity implements CardboardView.Ste
         mModelParam = GLES20.glGetUniformLocation(mGlProgram, "u_Model");
         mIsFloorParam = GLES20.glGetUniformLocation(mGlProgram, "u_IsFloor");
 
+
         // Build the Model part of the ModelView matrix.
         Matrix.rotateM(mModelCube, 0, TIME_DELTA, 0.5f, 0.5f, 1.0f);
 
         // send head vector to server
         headTransform.getHeadView(mHeadView, 0);
         float[] forward = new float[3];
-        headTransform.getForwardVector(forward, 0);
+        float[] tmp = new float[3];
+        headTransform.getForwardVector(tmp, 0);
+        forward[2] = -tmp[2];
+        headTransform.getUpVector(tmp, 0);
+        forward[1] = tmp[2];
+        headTransform.getRightVector(tmp,0);
+        forward[0] = -tmp[2];
         Log.i(TAG, "Head Vector: [" + forward[0] + ", " + forward[1] + ", " + forward[2] + "]");
 
         world.update("HeadVector", forward);
 
         mHeadPosition = world.get("HeadPosition");
         if (mHeadPosition==null) {
+
             mHeadPosition = new float[]{0.0f, 0.0f, 0.0f};
         }
 
@@ -363,8 +355,15 @@ public class MainActivity extends CardboardActivity implements CardboardView.Ste
         GLES20.glEnableVertexAttribArray(mColorParam);
         checkGLError("mColorParam");
 
+        float[] eyeViewTrans = transform.getEyeView();
+        Log.i(TAG, "eye Trans: [" + eyeViewTrans[0] + ", " + eyeViewTrans[1] + ", " + eyeViewTrans[2] + "]");
+
+        for (int i=0;i<eyeViewTrans.length;i++) {
+            eyeViewTrans[i] = eyeViewTrans[i] * (float)0.0005;
+        }
+
         // Apply the eye transformation to the camera.
-        Matrix.multiplyMM(mView, 0, transform.getEyeView(), 0, mCamera, 0);
+        Matrix.multiplyMM(mView, 0, eyeViewTrans, 0, mCamera, 0);
 
         // Set the position of the light
         Matrix.multiplyMV(mLightPosInEyeSpace, 0, mView, 0, mLightPosInWorldSpace, 0);

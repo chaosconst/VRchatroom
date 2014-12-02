@@ -101,7 +101,7 @@ public class MainActivity extends CardboardActivity implements CardboardView.Ste
     float mX = 0f;
     float mY = 0f;
     float mZ = -12f;
-    boolean near = false;
+    boolean near = true;
 
 
 
@@ -170,6 +170,7 @@ public class MainActivity extends CardboardActivity implements CardboardView.Ste
         setCardboardView(cardboardView);
 
         mModelCube = new float[16];
+
         mCamera = new float[16];
         mView = new float[16];
         mModelViewProjection = new float[16];
@@ -314,11 +315,15 @@ public class MainActivity extends CardboardActivity implements CardboardView.Ste
 
 
         // Build the Model part of the ModelView matrix.
+        Matrix.rotateM(mModelCube, 0, TIME_DELTA, 0.5f, 0.5f, 1.0f);
+
         //Matrix.rotateM(mModelCube, 0, 0, mX,mY,mZ);
-        Matrix.setIdentityM(mModelCube, 0);
-        Matrix.translateM(mModelCube, 0, mX, mY, mZ);
+//        Matrix.setIdentityM(mModelCube, 0);
+//        Matrix.translateM(mModelCube, 0, mX, mY, mZ);
+        //Matrix.setIdentityM(mModelCube, 0);
+        //Matrix.rotateM(mModelCube, 0, 0, mX,mY,mZ);
         // Build the Model part of the ModelView matrix.
-//        Matrix.rotateM(mModelCube, 0, TIME_DELTA, 0.5f, 0.5f, 1.0f);
+//        Matrix.rotateM(mModelCube, 0, TIME_DELTA, 0.0f,0.0f,-8f);
 
         // send head vector to server
         headTransform.getHeadView(mHeadView, 0);
@@ -401,6 +406,8 @@ public class MainActivity extends CardboardActivity implements CardboardView.Ste
      * the shader.
      */
     public void drawCube() {
+
+
         // This is not the floor!
         GLES20.glUniform1f(mIsFloorParam, 0f);
 
@@ -422,7 +429,6 @@ public class MainActivity extends CardboardActivity implements CardboardView.Ste
                 false, 0, mCubeNormals);
 
 
-
         if (isLookingAtObject()) {
             GLES20.glVertexAttribPointer(mColorParam, 4, GLES20.GL_FLOAT, false,
                     0, mCubeFoundColors);
@@ -431,6 +437,11 @@ public class MainActivity extends CardboardActivity implements CardboardView.Ste
                     0, mCubeColors);
         }
         GLES20.glDrawArrays(GLES20.GL_TRIANGLES, 0, 36);
+
+
+        GLES20.glDrawArrays(GLES20.GL_TRIANGLES, 36, 12);
+
+
         checkGLError("Drawing cube");
     }
 

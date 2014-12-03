@@ -6,6 +6,8 @@ import java.io.InputStreamReader;
 import java.io.PrintWriter;
 import java.net.Socket;
 import java.net.UnknownHostException;
+import java.util.Iterator;
+
 import android.util.Log;
 import org.json.*;
 
@@ -50,7 +52,26 @@ public class WorldRunner implements Runnable{
                     position[1] = (float)status.getDouble(4);
                     position[2] = (float)status.getDouble(5);
                     world.update("HeadPosition", position);
-                    Log.i(TAG, positionStr);
+//                    Log.i(TAG, positionStr);
+                    Iterator<String> keys = obj.keys();
+                    while(keys.hasNext()){
+
+                        String key = keys.next();
+                        if(!key.equals("self") && !key.equals(selfname)){
+                            JSONArray  value= obj.getJSONArray(key);
+                            float[] temp = new float[3];
+                            temp[0] = (float)value.getDouble(3);
+                            temp[1] = (float)value.getDouble(4);
+                            temp[2] = (float)value.getDouble(5);
+
+                            User user = world.getUser(key) == null ? new User() : world.getUser(key);
+                            user.setIp(key);
+                            user.setHeadPosition(temp);
+                            world.updateUser(user);
+                        }
+
+                    }
+
                 }
             } catch(Throwable e){
                 Log.e(TAG, e.toString());

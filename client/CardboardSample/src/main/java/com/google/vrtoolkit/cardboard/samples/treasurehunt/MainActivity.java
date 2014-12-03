@@ -20,6 +20,8 @@ import android.content.Context;
 import android.opengl.GLES20;
 import android.opengl.Matrix;
 import android.os.Bundle;
+import android.os.Handler;
+import android.os.Message;
 import android.os.Vibrator;
 import android.util.Log;
 import com.google.vrtoolkit.cardboard.*;
@@ -35,6 +37,10 @@ import java.nio.FloatBuffer;
 
 import java.io.*;
 import java.net.*;
+import java.util.List;
+import java.util.concurrent.Executors;
+
+import java.util.concurrent.TimeUnit;
 
 /**
  * A Cardboard sample application.
@@ -96,12 +102,14 @@ public class MainActivity extends CardboardActivity implements CardboardView.Ste
 
     private Vibrator mVibrator;
 
-    private CardboardOverlayView mOverlayView;
+    private static CardboardOverlayView mOverlayView;
 
     float mX = 0f;
     float mY = 0f;
     float mZ = -12f;
     boolean near = true;
+
+    Handler handler = null;
 
 
 
@@ -181,13 +189,49 @@ public class MainActivity extends CardboardActivity implements CardboardView.Ste
 
 
         mOverlayView = (CardboardOverlayView) findViewById(R.id.overlay);
-        mOverlayView.show3DToast("Connecting...");
+       // mOverlayView.show3DToast("Connecting...");
 
         Log.e(TAG, "Runner Init");
         runner.setWorld(world);
         Log.e(TAG, "Runner Will Run");
         new Thread(runner).start();
         Log.e(TAG, "Runner is running");
+
+        handler = new Handler(){
+
+            public void handleMessage(Message msg){
+
+                if(msg.what == 1){
+                    int userCount = world.getOnlineUsers().size();
+                    if(userCount == 0){
+                        mOverlayView.show3DToast("还没有发现小伙伴,努力寻找中....");
+                    }else{
+                        mOverlayView.show3DToast("发现有"+userCount+"个小伙伴在线....去找找他们吧......");
+                    }
+
+                }else if(msg.what ==2){
+                    User user = world.getOnlineUsers().get(0);
+                    mOverlayView.show3DToast("cube说: hi,你好呀....我在网络上的位置是： "+user.getIp());
+                }
+
+            }
+        };
+
+
+
+        Executors.newSingleThreadScheduledExecutor().scheduleAtFixedRate(new Runnable(){
+
+            @Override
+            public void run() {
+
+                Message msg = new Message();
+                msg.what = 1;
+                handler.sendEmptyMessage(msg.what);
+            }
+
+
+        },2000,10000, TimeUnit.MILLISECONDS);
+
 
     }
 
@@ -315,7 +359,10 @@ public class MainActivity extends CardboardActivity implements CardboardView.Ste
 
 
         // Build the Model part of the ModelView matrix.
+        //float[] partcube = new float[mModelCube.length/2];
+        //for (int i=0;i<mModelCube.length/2;i++) partcube[i] = mModelCube[i];
         Matrix.rotateM(mModelCube, 0, TIME_DELTA, 0.5f, 0.5f, 1.0f);
+        //for (int i=0;i<mModelCube.length/2;i++) mModelCube[i] = partcube[i];
 
         //Matrix.rotateM(mModelCube, 0, 0, mX,mY,mZ);
 //        Matrix.setIdentityM(mModelCube, 0);
@@ -335,7 +382,7 @@ public class MainActivity extends CardboardActivity implements CardboardView.Ste
         forward[1] = tmp[2];
         headTransform.getRightVector(tmp,0);
         forward[0] = -tmp[2];
-        Log.i(TAG, "Head Vector: [" + forward[0] + ", " + forward[1] + ", " + forward[2] + "]");
+//        Log.i(TAG, "Head Vector: [" + forward[0] + ", " + forward[1] + ", " + forward[2] + "]");
 
         world.update("HeadVector", forward);
 
@@ -346,7 +393,7 @@ public class MainActivity extends CardboardActivity implements CardboardView.Ste
         }
 
         // Build the camera matrix and apply it to the ModelView.
-        Matrix.setLookAtM(mCamera, 0, mHeadPosition[0], mHeadPosition[1], mHeadPosition[2]+CAMERA_Z, mHeadPosition[0], mHeadPosition[1], mHeadPosition[2], 0.0f, 1.0f, 0.0f);
+        Matrix.setLookAtM(mCamera, 0, mHeadPosition[0], mHeadPosition[1], mHeadPosition[2] + CAMERA_Z, mHeadPosition[0], mHeadPosition[1], mHeadPosition[2], 0.0f, 1.0f, 0.0f);
 
         checkGLError("onReadyToDraw");
     }
@@ -370,7 +417,7 @@ public class MainActivity extends CardboardActivity implements CardboardView.Ste
         checkGLError("mColorParam");
 
         float[] eyeViewTrans = transform.getEyeView();
-        Log.i(TAG, "eye Trans: [" + eyeViewTrans[0] + ", " + eyeViewTrans[1] + ", " + eyeViewTrans[2] + "]");
+        //Log.i(TAG, "eye Trans: [" + eyeViewTrans[0] + ", " + eyeViewTrans[1] + ", " + eyeViewTrans[2] + "]");
 
         for (int i=0;i<eyeViewTrans.length;i++) {
             eyeViewTrans[i] = eyeViewTrans[i] * (float)0.0005;
@@ -428,21 +475,27 @@ public class MainActivity extends CardboardActivity implements CardboardView.Ste
         GLES20.glVertexAttribPointer(mNormalParam, 3, GLES20.GL_FLOAT,
                 false, 0, mCubeNormals);
 
-
         if (isLookingAtObject()) {
+            Log.i(TAG, "IS Looking At Object");
+
             GLES20.glVertexAttribPointer(mColorParam, 4, GLES20.GL_FLOAT, false,
                     0, mCubeFoundColors);
+            Message msg = new Message();
+            msg.what = 2;
+            handler.sendEmptyMessage(msg.what);
+
         } else {
             GLES20.glVertexAttribPointer(mColorParam, 4, GLES20.GL_FLOAT, false,
                     0, mCubeColors);
         }
-        GLES20.glDrawArrays(GLES20.GL_TRIANGLES, 0, 36);
+//        GLES20.glDrawArrays(GLES20.GL_LINES, 0, 36);
+//
+//
+//        GLES20.glDrawArrays(GLES20.GL_TRIANGLES, 36, 12);
 
+         drawOnlineUser();
+         checkGLError("Drawing cube");
 
-        GLES20.glDrawArrays(GLES20.GL_TRIANGLES, 36, 12);
-
-
-        checkGLError("Drawing cube");
     }
 
     /**
@@ -474,7 +527,6 @@ public class MainActivity extends CardboardActivity implements CardboardView.Ste
     @Override
     public void onCardboardTrigger() {
         Log.i(TAG, "onCardboardTrigger");
-
         if (isLookingAtObject()) {
             mScore++;
             mOverlayView.show3DToast("Found it! Look around for another one.\nScore = " + mScore);
@@ -540,6 +592,25 @@ public class MainActivity extends CardboardActivity implements CardboardView.Ste
 
         return (Math.abs(pitch) < PITCH_LIMIT) && (Math.abs(yaw) < YAW_LIMIT);
     }
+
+    //draw online users
+    private void drawOnlineUser(){
+
+          List<User> users = world.getOnlineUsers();
+//        Log.i(TAG, "draw online user, size ="+users.size());
+
+        for(int i = 0; i < users.size(); i++){
+//              Log.i(TAG, "draw online user, i ="+i);
+
+              if(i==0){
+                  GLES20.glDrawArrays(GLES20.GL_TRIANGLES, 0, 36);
+              }else if(i == 1){
+                  GLES20.glDrawArrays(GLES20.GL_TRIANGLES, 36, 12);
+              }
+        }
+    }
+
+
 }
 
 

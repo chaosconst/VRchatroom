@@ -1,0 +1,52 @@
+<?xml version="1.0" encoding="utf-8"?>
+<pre-dex-items>
+
+    <item
+        dex="/Users/squirrelrao/Documents/ideaWorkspace/VRchatroom/client/CardboardSample/build/intermediates/pre-dexed/debug/cardboard-76775434366627d29fff7b92380a48e128e93710.jar"
+        jar="/Users/squirrelrao/Documents/ideaWorkspace/VRchatroom/client/CardboardSample/libs/cardboard.jar"
+        jumboMode="false"
+        revision="19.1.0"
+        sha1="7800973ef52ae629978ad974370b6a0b9bc79e25"/>
+    <item
+<<<<<<< HEAD
+        dex="/Users/yuan/Projects/VRchatroom/client/CardboardSample/build/intermediates/pre-dexed/debug/internal_impl-21.0.2-eddc053adbe3eda1eb771d80782d477845a1fe52.jar"
+        jar="/Users/yuan/Projects/VRchatroom/client/CardboardSample/build/intermediates/exploded-aar/com.android.support/support-v4/21.0.2/libs/internal_impl-21.0.2.jar"
+        jumboMode="false"
+        revision="19.1.0"
+        sha1="962e8b12569c56dbdcf8367eb4eac8bb129cd18f"/>
+    <item
+        dex="/Users/yuan/Projects/cardboard.old/CardboardSample/build/intermediates/pre-dexed/debug/internal_impl-21.0.2-296a9304c378d19115c57e673507be799107b812.jar"
+        jar="/Users/yuan/Projects/cardboard.old/CardboardSample/build/intermediates/exploded-aar/com.android.support/support-v4/21.0.2/libs/internal_impl-21.0.2.jar"
+=======
+        dex="/Users/squirrelrao/Documents/ideaWorkspace/VRchatroom/client/CardboardSample/build/intermediates/pre-dexed/debug/internal_impl-21.0.2-94ac346095381441878ec5501012ca1d5f0b8031.jar"
+        jar="/Users/squirrelrao/Documents/ideaWorkspace/VRchatroom/client/CardboardSample/build/intermediates/exploded-aar/com.android.support/support-v4/21.0.2/libs/internal_impl-21.0.2.jar"
+>>>>>>> 2a059ab3a4859939431eaabe686988b7dde57381
+        jumboMode="false"
+        revision="19.1.0"
+        sha1="962e8b12569c56dbdcf8367eb4eac8bb129cd18f"/>
+    <item
+        dex="/Users/squirrelrao/Documents/ideaWorkspace/VRchatroom/client/CardboardSample/build/intermediates/pre-dexed/debug/support-annotations-21.0.2-d9131f27bd284785d953b1d0045a3d832dfb686a.jar"
+        jar="/Applications/adt-bundle-mac-x86_64-20140321/sdk/extras/android/m2repository/com/android/support/support-annotations/21.0.2/support-annotations-21.0.2.jar"
+        jumboMode="false"
+        revision="19.1.0"
+        sha1="99373741f99a0556ee293c41e8faa1ca3ae8a4e6"/>
+    <item
+        dex="/Users/squirrelrao/Documents/ideaWorkspace/VRchatroom/client/CardboardSample/build/intermediates/pre-dexed/debug/classes-096afe7ef0463e82687a388ec8496f82864c5819.jar"
+        jar="/Users/squirrelrao/Documents/ideaWorkspace/VRchatroom/client/CardboardSample/build/intermediates/exploded-aar/com.android.support/support-v4/21.0.2/classes.jar"
+        jumboMode="false"
+        revision="19.1.0"
+        sha1="d1bf02de1c56d942e7a9d093b8610ba1ef4128e3"/>
+    <item
+        dex="/Users/yuan/Projects/VRchatroom/client/CardboardSample/build/intermediates/pre-dexed/debug/cardboard-9fdd40343056e20f2aeff226287b4669137cc7cb.jar"
+        jar="/Users/yuan/Projects/VRchatroom/client/CardboardSample/libs/cardboard.jar"
+        jumboMode="false"
+        revision="19.1.0"
+        sha1="7800973ef52ae629978ad974370b6a0b9bc79e25"/>
+    <item
+        dex="/Users/yuan/Projects/VRchatroom/client/CardboardSample/build/intermediates/pre-dexed/debug/classes-9a7f49f01cf762ccc96e94661fec94e609acb6c1.jar"
+        jar="/Users/yuan/Projects/VRchatroom/client/CardboardSample/build/intermediates/exploded-aar/com.android.support/support-v4/21.0.2/classes.jar"
+        jumboMode="false"
+        revision="19.1.0"
+        sha1="d1bf02de1c56d942e7a9d093b8610ba1ef4128e3"/>
+
+</pre-dex-items>
